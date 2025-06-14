@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mini Shop</title>
+</head>
+<body>
+  <h1>Mini Shop</h1>
+  <div id="products"></div>
+
+  <h2>Cart</h2>
+  <ul id="cart"></ul>
+  <p><strong>Total:</strong> <span id="total">0</span> LKR</p>
+
+  <h2>Checkout</h2>
+  <form onsubmit="return sendOrder()">
+    <input id="name" placeholder="Your name" required><br>
+    <input id="address" placeholder="Address" required><br>
+    <input id="phone" placeholder="Phone" required><br><br>
+    <button type="submit">Place Order</button>
+  </form>
+
+  <script>
+    const products = [
+      { name: 'Rice', price: 150 },
+      { name: 'Milk Powder', price: 400 },
+      { name: 'Tea', price: 250 }
+    ];
+    const cart = [];
+
+    const productDiv = document.getElementById('products');
+    products.forEach((p, i) => {
+      const btn = `<button onclick="addToCart(${i})">Add</button>`;
+      productDiv.innerHTML += `<p>${p.name} - LKR ${p.price} ${btn}</p>`;
+    });
+
+    function addToCart(i) {
+      cart.push(products[i]);
+      updateCart();
+    }
+
+    function updateCart() {
+      const ul = document.getElementById('cart');
+      ul.innerHTML = '';
+      let total = 0;
+      cart.forEach(item => {
+        ul.innerHTML += `<li>${item.name} - LKR ${item.price}</li>`;
+        total += item.price;
+      });
+      document.getElementById('total').textContent = total;
+    }
+
+    function sendOrder() {
+      const name = document.getElementById('name').value;
+      const address = document.getElementById('address').value;
+      const phone = document.getElementById('phone').value;
+      const total = document.getElementById('total').textContent;
+      const cartData = cart.map(p => p.name + ' (LKR ' + p.price + ')').join(', ');
+
+      fetch('PASTE_YOUR_WEB_APP_URL_HERE', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, address, phone, cart: cartData, total })
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert('Order sent!');
+        cart.length = 0;
+        updateCart();
+      })
+      .catch(err => alert('Error: ' + err));
+      return false;
+    }
+  </script>
+</body>
+</html>
