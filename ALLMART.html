@@ -56,7 +56,7 @@
       const total = document.getElementById('total').textContent;
       const cartData = cart.map(p => p.name + ' (LKR ' + p.price + ')').join(', ');
 
-      fetch('PASTE_YOUR_WEB_APP_URL_HERE', {
+      fetch('https://script.google.com/macros/s/AKfycbyuBsLSzkmo1ZiIA1ncGUGq0VyJY7YN7mxtvnnh3FZYwFgujPt2xBqVjRiWHtuEaQby/exec', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, address, phone, cart: cartData, total })
